@@ -412,12 +412,14 @@ export default function RegistrationModal({
       >
         {/* Modal Container - Full screen on mobile, split on desktop */}
         <div className="relative w-full min-h-full md:min-h-0 md:h-auto md:max-h-[90vh] md:max-w-6xl md:rounded-2xl overflow-hidden bg-white shadow-2xl flex flex-col md:flex-row m-0 md:m-4">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-50 text-gray-600 hover:text-red-600 transition p-2 bg-white/80 rounded-full md:bg-transparent"
-          >
-            <X size={26} />
-          </button>
+          {step !== "success" && (
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-50 text-gray-600 hover:text-red-600 transition p-2 bg-white/80 rounded-full md:bg-transparent"
+            >
+              <X size={26} />
+            </button>
+          )}
 
           {/* LEFT SIDE - Forms */}
           <div className={`w-full overflow-y-auto bg-white flex-1 ${step === "avatar" ? "" : "md:w-1/2"}`}>
@@ -1172,36 +1174,39 @@ function SuccessModal({
   const userPhone = guestData?.phone || "+91XXXXXXXXXX";
   const ticketCode = guestData?.id || ticketID;
 
+  const downloadTicketImage = async () => {
+    if (!ticketImageUrl) return;
+    try {
+      const safeName = (userName || "guest").toLowerCase().replace(/\s+/g, "_");
+      const filename = `${safeName}_scaleupticket.png`;
+      
+      const response = await fetch(`/api/proxy-image?url=${encodeURIComponent(ticketImageUrl)}`);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Failed to trigger automatic ticket download:", error);
+    }
+  };
+
   const handleDownloadAndProceed = async () => {
-    // 1. Trigger Analytics
     analytics.ticketDownload();
     analytics.goToAvatarClick();
-
-    // 2. Trigger Download if URL is available
-    if (ticketImageUrl) {
-      try {
-        const safeName = (userName || "guest").toLowerCase().replace(/\s+/g, "_");
-        const filename = `${safeName}_scaleupticket.png`;
-        
-        // Fetch the image as a blob to force automatic download with the custom name
-        const response = await fetch(`/api/proxy-image?url=${encodeURIComponent(ticketImageUrl)}`);
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(blobUrl);
-      } catch (error) {
-        console.error("Failed to trigger automatic ticket download:", error);
-      }
-    }
-
-    // 3. Move to next step
+    await downloadTicketImage();
     setStep("avatar");
+  };
+
+  const handleBoringDownload = async () => {
+    analytics.ticketDownload();
+    await downloadTicketImage();
+    onClose();
   };
 
   return (
@@ -1278,7 +1283,7 @@ function SuccessModal({
         <button
           onClick={handleDownloadAndProceed}
           disabled={loading}
-          className="w-full py-3.5 sm:py-4 mb-10 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group px-4"
+          className="w-full py-3.5 sm:py-4 mb-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group px-4"
         >
           {loading ? (
             <>
@@ -1295,6 +1300,19 @@ function SuccessModal({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </>
+          )}
+        </button>
+
+        {/* Boring Version Button */}
+        <button
+          onClick={handleBoringDownload}
+          disabled={loading}
+          className="w-full py-3.5 sm:py-4 mb-4 bg-transparent border-2 border-gray-200 text-gray-500 font-medium rounded-xl hover:bg-gray-50 hover:text-gray-700 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group px-4"
+        >
+          {loading ? (
+            <span className="text-sm sm:text-base">Processing...</span>
+          ) : (
+            <span className="text-[13px] xs:text-sm sm:text-base whitespace-nowrap">Download Basic Ticket & Exit</span>
           )}
         </button>
       </div>
