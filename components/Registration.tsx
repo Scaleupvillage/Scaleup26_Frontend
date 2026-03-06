@@ -1180,15 +1180,23 @@ function SuccessModal({
     // 2. Trigger Download if URL is available
     if (ticketImageUrl) {
       try {
-        const downloadUrl = `/api/proxy-image?url=${encodeURIComponent(ticketImageUrl)}&filename=scaleup-ticket-${ticketCode}.png&disposition=attachment`;
+        const safeName = (userName || "guest").toLowerCase().replace(/\s+/g, "_");
+        const filename = `${safeName}_scaleupticket.png`;
+        
+        // Fetch the image as a blob to force automatic download with the custom name
+        const response = await fetch(`/api/proxy-image?url=${encodeURIComponent(ticketImageUrl)}`);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
         const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = `scaleup-ticket-${ticketCode}.png`;
+        link.href = blobUrl;
+        link.download = filename;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
       } catch (error) {
-        console.error("Failed to trigger ticket download:", error);
+        console.error("Failed to trigger automatic ticket download:", error);
       }
     }
 
