@@ -2,6 +2,7 @@
 
 import { Instagram, MoveLeft, X } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
+import Script from "next/script";
 import { useState, useEffect } from "react";
 import { allCountries } from "country-telephone-data";
 import AvatarGeneratorModal from "@/components/AvatarGeneratorModal";
@@ -1212,6 +1213,30 @@ function SuccessModal({
 
   return (
     <div className="p-8 md:p-10 lg:p-12 pt-12 md:pt-8 lg:pt-24 lg:mt-10 lg:pb-12 relative h-full bg-white flex flex-col justify-center">
+      {/* Meta Pixel Code - CompleteRegistration */}
+      <Script id="meta-pixel-complete-registration">
+        {`
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', '1101350224207637');
+          fbq('track', 'CompleteRegistration');
+        `}
+      </Script>
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: "none" }}
+          src="https://www.facebook.com/tr?id=1101350224207637&ev=PageView&noscript=1"
+          alt=""
+        />
+      </noscript>
       <div className="max-w-lg">
         <h1
           className="text-4xl md:text-5xl font-normal text-gray-900 mb-4"
