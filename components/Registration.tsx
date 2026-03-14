@@ -202,6 +202,16 @@ export default function RegistrationModal({
         setTicketID(verifyResult.response.event_register_id);
         setStep("success");
         analytics.registrationSuccess("vip");
+        fetch('/api/fb-conversion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventName: 'CompleteRegistration',
+            email: formData.email,
+            phone: formData.countryCode.replace('+', '') + formData.phone,
+            name: formData.name
+          })
+        }).catch(err => console.error("FB CAPI error:", err));
       } else {
             toast.error("Payment verification failed");
           }
@@ -385,6 +395,17 @@ export default function RegistrationModal({
       setRegisterStatus("submitted");
       setStep("success");
       analytics.registrationSuccess(selectedTicket || "general");
+      
+      fetch('/api/fb-conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventName: 'CompleteRegistration',
+          email: formData.email,
+          phone: formData.countryCode.replace('+', '') + formData.phone,
+          name: formData.name
+        })
+      }).catch(err => console.error("FB CAPI error:", err));
     } catch (error) {
       toast.error("Something went wrong");
       console.error(error);
