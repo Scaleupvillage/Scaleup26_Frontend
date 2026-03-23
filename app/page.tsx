@@ -70,7 +70,7 @@ export default function Home() {
       <Hero />
       <Date />
       {/* <About/> */}
-      <ScheduleSection/>
+      {/* <ScheduleSection/> */}
       <Speaker/>
       
       <Banner />
