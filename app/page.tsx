@@ -13,7 +13,7 @@ import Speaker from "@/components/Speakers"
 import PartnersSection from "@/components/Partners";
 import ScaleupEventRoster from "@/components/EventRoster";
 import About from "@/components/About";
-
+import ScheduleSection from "../components/Schedule";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -70,6 +70,7 @@ export default function Home() {
       <Hero />
       <Date />
       {/* <About/> */}
+      <ScheduleSection/>
       <Speaker/>
       
       <Banner />
