@@ -10,6 +10,29 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
+
+  openGraph: {
+    title: "ScaleUp Conclave 2026",
+    description: "Join ScaleUp Conclave - 2026 🚀",
+    url: "https://scaleupconclave.com/", // replace with your domain
+    siteName: "ScaleUp Conclave",
+    images: [
+      {
+        url: "/og-image.png", // 👈 your OG image
+        width: 1200,
+        height: 630,
+        alt: "ScaleUp Conclave",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "ScaleUp Conclave 2026",
+    description: "Join ScaleUp Conclave 🚀",
+    images: ["/og-img.png"],
+  },
 };
 
 export default function RootLayout({

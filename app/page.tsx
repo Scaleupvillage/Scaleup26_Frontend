@@ -74,7 +74,7 @@ export default function Home() {
       <Speaker/>
       
       <Banner />
-      <Involved />
+      {/* <Involved /> */}
       {/* <ScaleupEventRoster/> */}
       <PartnersSection/>
       <Footer />
