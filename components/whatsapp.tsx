@@ -58,7 +58,7 @@ export function Whatsapp({ open, setOpen }: Props) {
 
         <div className="flex justify-end gap-3 mt-4">
           <a
-            href="https://chat.whatsapp.com/L6MYoQikKvlJIskD6uFnRQ?mode=gi_t"
+            href="https://chat.whatsapp.com/CXpSRDlCw8LJfVFOkpg2dj?mode=gi_t"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full inline-flex items-center justify-center gap-1 md:gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2 md:py-3 px-4 md:px-6 rounded-full transition-all duration-300 transform hover:scale-105 text-sm md:text-base"

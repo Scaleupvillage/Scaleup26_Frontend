@@ -22,7 +22,7 @@ function Banner() {
 
           <div className="flex flex-wrap items-center gap-4 px-6 mb-6 md:px-9">
             <a
-              href="https://chat.whatsapp.com/L6MYoQikKvlJIskD6uFnRQ?mode=gi_t"
+              href="https://chat.whatsapp.com/CXpSRDlCw8LJfVFOkpg2dj?mode=gi_t"
               target="_blank"
               rel="noopener noreferrer"
               className="relative w-[220px] flex items-center gap-2 rounded-full shadow-md hover:shadow-lg transition px-4 py-2"
