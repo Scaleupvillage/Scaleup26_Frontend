@@ -22,12 +22,55 @@ const buildFbEventId = () => {
   return `scaleup-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 };
 
+const META_PIXEL_ID = "1101350224207637";
+const META_ADV_MATCH_STORAGE_KEY = "scaleup2026:meta_advanced_matching";
+
+const setMetaAdvancedMatching = (email: string, phone: string) => {
+  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedPhone = phone.replace(/\D/g, "");
+
+  if (!normalizedEmail && !normalizedPhone) {
+    return;
+  }
+
+  const metaUserData: { em?: string; ph?: string } = {};
+
+  if (normalizedEmail) {
+    metaUserData.em = normalizedEmail;
+  }
+
+  if (normalizedPhone) {
+    metaUserData.ph = normalizedPhone;
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(
+        META_ADV_MATCH_STORAGE_KEY,
+        JSON.stringify(metaUserData),
+      );
+    } catch (error) {
+      console.error("Failed to persist Meta advanced matching data:", error);
+    }
+
+    if (typeof window.fbq === "function") {
+      try {
+        window.fbq("set", "userData", metaUserData);
+      } catch {
+        window.fbq("init", META_PIXEL_ID, metaUserData);
+      }
+    }
+  }
+};
+
 const trackRegistrationWithMeta = async (payload: {
   email: string;
   phone: string;
   name: string;
 }) => {
   const eventId = buildFbEventId();
+
+  setMetaAdvancedMatching(payload.email, payload.phone);
 
   if (typeof window !== "undefined" && typeof window.fbq === "function") {
     window.fbq("track", "CompleteRegistration", {}, { eventID: eventId });
