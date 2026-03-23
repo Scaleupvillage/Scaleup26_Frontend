@@ -44,7 +44,25 @@ export default function RootLayout({
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1101350224207637');
+            var advancedMatching = {};
+            try {
+              var rawMetaUserData = localStorage.getItem('scaleup2026:meta_advanced_matching');
+              if (rawMetaUserData) {
+                var parsedMetaUserData = JSON.parse(rawMetaUserData);
+                if (parsedMetaUserData && parsedMetaUserData.em) {
+                  advancedMatching.em = parsedMetaUserData.em;
+                }
+                if (parsedMetaUserData && parsedMetaUserData.ph) {
+                  advancedMatching.ph = parsedMetaUserData.ph;
+                }
+              }
+            } catch (e) {}
+
+            if (advancedMatching.em || advancedMatching.ph) {
+              fbq('init', '1101350224207637', advancedMatching);
+            } else {
+              fbq('init', '1101350224207637');
+            }
             fbq('track', 'PageView');
           `}
         </Script>
