@@ -1,12 +1,6 @@
 "use client";
-import { ChevronRight } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
-
-import Registration from "./Registration";
-import AiModalPop from "./AiModalPop";
-import { analytics } from "@/lib/analytics";
-const venueMapUrl = "/assets/venue-map.pdf";
 
 // ── Shared Venue Map Button ──────────────────────────────────────────────────
 function VenueMapButton({ className = "" }) {
@@ -176,13 +170,6 @@ function ScheduleButton({ className = "" }) {
   );
 }
 function Hero() {
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-
-  useEffect(() => {
-    const handler = () => setIsRegisterModalOpen(true);
-    window.addEventListener("open-registration-modal", handler);
-    return () => window.removeEventListener("open-registration-modal", handler);
-  }, []);
 
   return (
     <section className="w-full flex flex-col items-center px-2 py-2 relative overflow-hidden">
@@ -277,26 +264,24 @@ function Hero() {
 
           {/* ── MOBILE: Book Tickets button ── */}
           <div className="flex mt-10 lg:hidden">
-            <button
-              onClick={() => {
-                setIsRegisterModalOpen(true);
-                analytics.heroRegisterClick();
-              }}
-              className="lg:w-[481px] flex items-center justify-between
-                bg-[#9df094] hover:bg-[#b0f5a8] 
+            <div
+              aria-disabled="true"
+              className="lg:w-[481px]
+                flex items-center justify-between
+                bg-[#9df094]
                 text-black font-semibold text-xl md:text-[36px]
                 py-4 px-6 md:px-8
                 rounded-l-xl rounded-r-[50px]
-                transition-all duration-200 active:scale-95
-                group relative"
+                relative cursor-default
+              "
             >
-              <span className="mr-6 tracking-tight">Book Tickets Now</span>
+              <span className="mr-6 tracking-tight">Thank you for visiting</span>
               <img
                 src="/assets/images/arrow_circle.svg"
                 alt="arrow button"
                 className="w-12 md:w-18 absolute right-0"
               />
-            </button>
+            </div>
           </div>
 
           {/* ── MOBILE: Date · Location · Venue Map row ── */}
@@ -345,29 +330,23 @@ function Hero() {
 
           {/* Book Tickets button */}
           <div className="flex mb-2 mt-10">
-            <button
-              onClick={() => {
-                setIsRegisterModalOpen(true);
-                analytics.heroRegisterClick();
-              }}
+            <div
+              aria-disabled="true"
               className="w-[441px] xl:w-[481px]
-                flex items-center justify-between
-                bg-[#9df094] hover:bg-[#b0f5a8]
-                text-black font-light text-xl md:text-[36px]
-                py-4 px-6 md:px-8
-                rounded-l-xl rounded-r-[50px]
-                transition-all duration-200 active:scale-95
-                group relative"
+      flex items-center justify-between
+      bg-[#9df094]
+      text-black font-semibold text-xl md:text-[36px]
+      py-4 px-6 md:px-8
+      rounded-l-xl rounded-r-[50px]
+      relative cursor-default"
             >
-              <span className="mr-6 tracking-tight" style={{ fontFamily: "Calsans, sans-serif" }}>
-                Book Tickets Now
-              </span>
+              <span className="mr-6 tracking-tight">Thank you for visiting</span>
               <img
                 src="/assets/images/arrow_circle.svg"
                 alt="arrow button"
                 className="w-12 md:w-18 absolute right-0"
               />
-            </button>
+            </div>
           </div>
 
           {/* ✅ DESKTOP: Date · Location · Venue Map — all inline, perfectly aligned */}
@@ -399,16 +378,6 @@ function Hero() {
 </div>          </div>
         </div>
       </div>
-
-      <Registration
-        isOpen={isRegisterModalOpen}
-        onClose={() => setIsRegisterModalOpen(false)}
-      />
-      <AiModalPop
-        showFloatingIcon={true}
-        showFloatingform={true}
-        onOpenRegistration={() => setIsRegisterModalOpen(true)}
-      />
     </section>
   );
 }
